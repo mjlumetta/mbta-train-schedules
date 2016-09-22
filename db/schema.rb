@@ -11,6 +11,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 0) do
+ActiveRecord::Schema.define(version: 20160922132313) do
+
+  create_table "departing_trains", force: :cascade do |t|
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.integer  "time_stamp"
+    t.string   "origin"
+    t.string   "trip"
+    t.string   "destination"
+    t.integer  "lateness"
+    t.integer  "status"
+    t.string   "track"
+    t.integer  "scheduled_time"
+  end
 
 end

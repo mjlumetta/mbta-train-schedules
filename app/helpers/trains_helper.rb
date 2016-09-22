@@ -1,4 +1,16 @@
 module TrainsHelper
+  def get_train_schedule
+    raw_csv = get_schedule_as_csv
+    schedule_lines = get_schedule_lines(raw_csv)
+    parse_schedule_lines(schedule_lines)
+  end
+  
+  private
+  
+  def schedule_url
+    "http://developer.mbta.com/lib/gtrtfs/Departures.csv"
+  end
+  
   def get_schedule_as_csv
     uri = URI(schedule_url)
     Net::HTTP.get(uri)
@@ -9,21 +21,11 @@ module TrainsHelper
   end
   
   def parse_schedule_lines(schedule_lines)
-    if schedule_lines.length < 1 
-      return []
-    end
+    return [] if schedule_lines.length < 1
     keys = schedule_keys(schedule_lines.slice!(0))
-    parsed_lines = []
-    schedule_lines.each do |train|
-      parsed_lines.push(parse_one_line(train, keys))
+    schedule_lines.map do |train|
+      parse_one_line(train, keys)
     end
-    parsed_lines
-  end
-  
-  private
-  
-  def schedule_url
-    "http://developer.mbta.com/lib/gtrtfs/Departures.csv"
   end
   
   def schedule_keys(first_csv_line)
@@ -39,15 +41,27 @@ module TrainsHelper
     schedule_keys.length.times do |index|
       parsed_line[schedule_keys[index]] = train_data[index].remove!("\"")
     end
-    convert_data_to_types(parsed_line)
-    parsed_line
+    convert_to_model(parsed_line)
   end
   
-  def convert_data_to_types(train_line)
+  def convert_data_to_types(train)
     int_keys = [ :time_stamp, :scheduled_time, :lateness ]
     int_keys.each do |key|
-      train_line[key] = train_line[key].to_i
+      train[key] = train[key].to_i
     end
-    train_line
+    train
+  end
+  
+  def convert_to_model(train_line)
+    DepartingTrain.new(
+      time_stamp: train_line[:time_stamp].to_i,
+      origin: train_line[:origin],
+      trip: train_line[:trip],
+      destination: train_line[:destination],
+      track: train_line[:track],
+      scheduled_time: train_line[:scheduled_time].to_i,
+      lateness: train_line[:lateness].to_i,
+      status: DepartingTrain.status_enum_val(train_line[:status])
+    )
   end
 end
