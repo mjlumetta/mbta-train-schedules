@@ -1,5 +1,2 @@
-<h1>Train Schedules</h1>
-
-<div>
-  <%= react_component "TrainFeed", url: index_path, pollInterval: 5000 %>
-</div>
+<h1 class="center vertical-spacing">Departures - MBTA</h1>
+<%= react_component "TrainSchedule", url: index_path, pollInterval: 5000 %>
