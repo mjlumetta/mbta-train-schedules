@@ -41,7 +41,7 @@ var TrainSchedule = React.createClass({
     return this.state.trainsByOrigin[origin];
   },
   
-  render() {
+  getSchedulesByOrigin() {
     var schedulesByOrigin = Object.keys(this.state.trainsByOrigin).map(
       function(origin) {
         return (
@@ -50,6 +50,7 @@ var TrainSchedule = React.createClass({
         );
       }, this
     );
+    
     return (
       <div className="row">
         <div className="col-md-12">
@@ -57,5 +58,14 @@ var TrainSchedule = React.createClass({
         </div>
       </div>
     );
+  },
+  
+  render() {
+    if (Object.keys(this.state.trainsByOrigin).length > 0) {
+      return this.getSchedulesByOrigin();
+    }
+    else {
+      return <EmptyDepartureList />;
+    }
   },
 });

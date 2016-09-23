@@ -15,7 +15,19 @@ var Departure = React.createClass({
   getStatusForDisplay() {
     var words = this.props.train.status.split("_");
     var capitalWords = words.map(this.titlecase, this);
-    return capitalWords.join(" ");
+    return capitalWords.join(" ") + this.getLatenessForDisplay();
+  },
+  
+  getLatenessForDisplay() {
+    if (this.props.train.lateness <= 0) {
+      return "";
+    }
+    else if (this.props.train.lateness < 60) {
+      return " - " + this.props.train.lateness + " seconds late";
+    }
+    else {
+      return " - " + Math.ceil(this.props.train.lateness / 60) + " minutes late";
+    }
   },
   
   titlecase(word) {

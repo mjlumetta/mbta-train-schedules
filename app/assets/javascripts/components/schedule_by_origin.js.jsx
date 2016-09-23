@@ -17,19 +17,12 @@ var ScheduleByOrigin = React.createClass({
     );
     var glyphiconArrow = this.state.showTrains ? "up" : "down";
     var glyphiconClass = "glyphicon glyphicon-menu-" + glyphiconArrow;
+    var buttonText = this.state.showTrains ? "Hide" : "Show";
     
     return (
       <div className="panel panel-default">
-        <div className="panel-heading">
-          <h4>
-            Trains departing from <strong>{this.props.origin}</strong>&nbsp;
-            <span className="badge">{this.props.trains.length}</span>
-            <span className="float-right" onClick={this.showOrHideDepartures}>
-              <span className={glyphiconClass} aria-hidden="true" />
-              &nbsp;{ this.state.showTrains ? "Hide" : "Show" }
-            </span>
-          </h4>
-        </div>
+        <SchedulePanelHeader onClick={this.showOrHideDepartures} length={this.props.trains.length}
+          origin={this.props.origin} glyphiconClass={glyphiconClass} btnText={buttonText}  />
         
         { this.state.showTrains ? <ScheduleTable departures={departureLines} /> : null }
       </div>
