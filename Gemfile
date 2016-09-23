@@ -27,6 +27,7 @@ gem 'responders', '~> 2.0'
 
 group :production do 
   gem 'pg', '~> 0.19'
+  gem 'rails_12factor'
 end
 
 group :development, :test do
