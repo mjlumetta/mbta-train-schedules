@@ -44,14 +44,6 @@ module TrainsHelper
     convert_to_model(parsed_line)
   end
   
-  def convert_data_to_types(train)
-    int_keys = [ :time_stamp, :scheduled_time, :lateness ]
-    int_keys.each do |key|
-      train[key] = train[key].to_i
-    end
-    train
-  end
-  
   def convert_to_model(train_line)
     DepartingTrain.new(
       time_stamp: train_line[:time_stamp].to_i,
