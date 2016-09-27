@@ -1,6 +1,6 @@
 var Departure = React.createClass({
   getTrackForDisplay() {
-    return (this.props.track ? this.props.train.track : "TBD");
+    return (this.props.train.track ? this.props.train.track : "TBD");
   },
   
   getTimeForDisplay() {
