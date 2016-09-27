@@ -38,9 +38,16 @@ group :development, :test do
   gem 'spring'
   
   gem 'sqlite3', '~> 1.3'
+  
+  gem 'jasmine-rails'
 end
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '~> 2.0'
+end
+
+group :test do
+  gem 'poltergeist'
+  gem 'phantomjs', require: 'phantomjs/poltergeist'
 end

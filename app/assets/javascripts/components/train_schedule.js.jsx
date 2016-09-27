@@ -38,7 +38,7 @@ var TrainSchedule = React.createClass({
   },
   
   getDeparturesByOrigin(origin) {
-    return this.state.trainsByOrigin[origin];
+    return (origin in this.state.trainsByOrigin ? this.state.trainsByOrigin[origin] : []);
   },
   
   getSchedulesByOrigin() {
