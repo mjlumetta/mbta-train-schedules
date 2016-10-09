@@ -23,4 +23,32 @@ describe("ScheduleTable", function() {
       component = ReactTestUtils.renderIntoDocument(element);
     }).not.toThrow();
   });
+  
+  it("should be a composite component", function() {
+    expect(ReactTestUtils.isCompositeComponent(component)).toBe(true);
+  });
+  
+  describe("UI", function() {
+    var table;
+    
+    it("should include a table", function() {
+      table = ReactTestUtils.findRenderedDOMComponentWithTag(component, "table");
+      expect(table).toBeDefined();
+      expect(ReactDOM.findDOMNode(table).className).toMatch("table");
+    });
+    
+    it("should have a ScheduleTableHeader within the table", function() {
+      var scheduleTableHeaderComponent = ReactTestUtils.findRenderedComponentWithType(component,
+        ScheduleTableHeader);
+      expect(scheduleTableHeaderComponent).toBeDefined();
+      var scheduleTableHeaderNode = ReactDOM.findDOMNode(scheduleTableHeaderComponent);
+      expect(scheduleTableHeaderNode.parentElement.tagName.toLowerCase()).toBe("table");
+    });
+    
+    it("should show all the departing trains", function() {
+      var departureComponents = ReactTestUtils.scryRenderedComponentsWithType(component,
+        Departure);
+      expect(departureComponents.length).toBe(2);
+    });
+  });
 });

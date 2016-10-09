@@ -23,6 +23,10 @@ describe("TrainSchedule", function() {
     }).not.toThrow();
   });
   
+  it("should be a composite component", function() {
+    expect(ReactTestUtils.isCompositeComponent(component)).toBe(true);
+  });
+  
   describe(".insertTrainInOriginGrouping", function() {
     var northStationTrain, southStationTrain;
     
@@ -145,6 +149,41 @@ describe("TrainSchedule", function() {
       schedulesElement = component.getSchedulesByOrigin();
       schedulesComponent = ReactTestUtils.renderIntoDocument(schedulesElement);
       expect(ReactTestUtils.isDOMComponent(schedulesComponent)).toBe(true);
+    });
+  });
+  
+  describe("UI", function() {
+    var domNode;
+    
+    beforeAll(function() {
+      component.setState({ trainsByOrigin: trainGrouping });
+    });
+    
+    beforeEach(function() {
+      domNode = ReactDOM.findDOMNode(component);
+    });
+    
+    it("should have a row div at the top level", function() {
+      expect(domNode.tagName.toLowerCase()).toBe("div");
+      expect(domNode.className).toMatch("row");
+    });
+    
+    it("should have a col-xs-12 div below the row", function() {
+      var columnDiv = domNode.children[0];
+      expect(columnDiv.tagName.toLowerCase()).toBe("div");
+      expect(columnDiv.className).toMatch(/col-(xs|sm|md|lg)-12/);
+    });
+    
+    it("should return the right number of ScheduleByOrigin components", function() {
+      var originComponents = ReactTestUtils.scryRenderedComponentsWithType(component,
+        ScheduleByOrigin);
+      expect(originComponents.length).toBe(2);
+    });
+    
+    it("should return an empty departure list if there are no trains", function() {
+      component.setState({ trainsByOrigin: {} });
+      var renderedElement = component.render();
+      expect(ReactTestUtils.isElementOfType(renderedElement, EmptyDepartureList)).toBe(true);
     });
   });
 });

@@ -15,6 +15,10 @@ describe("Departure", function() {
     }).not.toThrow();
   });
   
+  it("should be a composite component", function() {
+    expect(ReactTestUtils.isCompositeComponent(component)).toBe(true);
+  });
+  
   describe(".getTrackForDisplay", function() {
     it("should return the track if it is not empty", function() {
       expect(component.getTrackForDisplay()).toBe("2");
@@ -67,6 +71,47 @@ describe("Departure", function() {
     it("should round up lateness in minutes", function() {
       component.props.train.lateness = 145;
       expect(component.getLatenessForDisplay()).toBe(" - 3 minutes late");
+    });
+  });
+  
+  describe("UI", function() {
+    var domNode, columns;
+    
+    beforeAll(function() {
+      domNode = ReactDOM.findDOMNode(component);
+    });
+    
+    it("should have a table row at the top level", function() {
+      expect(domNode.tagName.toLowerCase()).toBe("tr");
+    });
+    
+    it("should have five columns in td elements", function() {
+      columns = domNode.children;
+      expect(columns.length).toBe(5);
+      
+      for(var index = 0; index < columns.length; index++) {
+        expect(columns[index].tagName.toLowerCase()).toBe("td");
+      }
+    });
+    
+    it("should have the departure time in the first column", function() {
+      expect(columns[0].textContent).toBe("7:35 PM");
+    });
+    
+    it("should have the destination in the second column", function() {
+      expect(columns[1].textContent).toBe("Newburyport");
+    });
+    
+    it("should have the trip id in the third column", function() {
+      expect(columns[2].textContent).toBe("177");
+    });
+    
+    it("should have the track number in the fourth column", function() {
+      expect(columns[3].textContent).toBe("2");
+    });
+    
+    it("should have the status in the fifth column", function() {
+      expect(columns[4].textContent).toBe("Now Boarding");
     });
   });
 });
